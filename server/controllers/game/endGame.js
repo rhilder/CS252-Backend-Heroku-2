@@ -5,7 +5,8 @@ const sendErrorResponse = (res, errorMessage) => res.status(400).json({
 const endGame = async (req,res) => {
     const {
         serverName,
-        playerWon
+        playerWon,
+        username
       } = req.body;
 
       const db = req.app.get('db');
@@ -41,6 +42,24 @@ const endGame = async (req,res) => {
       await db.games.update(
         { serverId: server.id },
         { gameFinished: true }
+      );
+
+      let user = await db.users.findOne({
+        username,
+      });
+
+      if (!user) {
+        errorMessage = 'Username does not exist.';
+        return sendErrorResponse(res, errorMessage);
+      };
+
+      let oldMoney=user.money;
+      let usePot=game.pot;
+      let newMoney=oldMoney+usePot;
+
+      await db.users.update(
+        { username: username },
+        { money: newMoney }
       );
 
       return res.status(200).json({
