@@ -43,6 +43,11 @@ const leaveServer = async (req, res) => {
         { serverId: server.id },
         { playersInGame: newPlayersInGame }
     );
+
+    await db.games.update(
+        { serverId: server.id },
+        { gameStarted: false }
+    );
     
     return res.status(200).json({
         message: 'Server was successfully left.',
