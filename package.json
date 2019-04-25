@@ -1,0 +1,39 @@
+{
+  "name": "seven-heaven-backend",
+  "version": "1.0.0",
+  "description": "Dice game backend",
+  "main": "index.js",
+  "repository": "https://github.com/nkannian/CS252-lab6",
+  "author": "Noah Kannianen",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@babel/node": "^7.2.2",
+    "@babel/register": "^7.4.0",
+    "cross-env": "^5.2.0",
+    "nodemon": "^1.18.11"
+  },
+  "dependencies": {
+    "@babel/cli": "^7.4.3",
+    "@babel/core": "^7.4.3",
+    "@babel/polyfill": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "axios": "^0.18.0",
+    "bcrypt": "^3.0.6",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "massive": "^5.7.7",
+    "morgan": "^1.9.1",
+    "node-pg-migrate": "^3.18.1",
+    "pg": "^7.10.0"
+  },
+  "scripts": {
+    "dev": "nodemon --exec babel-node server/index.js",
+    "dev-migrate": "cross-env DATABASE_URL=postgres://localhost/sevenheaven_local node-pg-migrate -m ./server/migrations",
+    "migrate-up": "node-pg-migrate -m ./server/migrations up",
+    "clean": "rm -rf dist && mkdir dist",
+    "build-babel": "babel server -d ./dist --ignore \"server/**/*.test.js\"",
+    "build": "yarn clean && yarn build-babel",
+    "start": "yarn migrate-up && yarn build && node ./dist/index.js"
+  }
+}
