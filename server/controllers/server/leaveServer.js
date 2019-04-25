@@ -37,7 +37,8 @@ const leaveServer = async (req, res) => {
 
     let usePlayerNumber=parseInt(playerNumber,10);
     let newPlayersInGame=game.playersInGame;
-    newPlayersInGame.splice(usePlayerNumber,1);
+    let realUsePlayerNumber = newPlayersInGame.indexOf(usePlayerNumber);
+    newPlayersInGame.splice(realUsePlayerNumber,1);
 
     await db.games.update(
         { serverId: server.id },
